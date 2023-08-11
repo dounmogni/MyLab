@@ -39,23 +39,23 @@ pipeline{
         //stage 4 Publis the artefacts to Nexus
         stage ("Publish to Nexus") {
             steps {
-             //script {
+             script {
                     // condition /initialisation to publish weither in snapshot or in relaease
-               // def NexusRepo = Version.endsWith("SNAPSHOT") ? "DounmogniDevOpsLab-SNAPSHOT" : "DounmogniDevOpsLab-RELEASE"
+                def NexusRepo = Version.endsWith("SNAPSHOT") ? "DounmogniDevOpsLab-SNAPSHOT" : "DounmogniDevOpsLab-RELEASE"
 
                 nexusArtifactUploader artifacts: 
                 [[artifactId: "${ArtifactId}", 
                 classifier: '', 
-                file: 'target/VinayDevOpsLab-0.0.3-SNAPSHOT.war', 
+                file: "target/${ArtifactId}-${Version}.war", 
                 type: 'war']], 
                 credentialsId: 'e59023d1-02cf-4f2b-8b7a-744a1984356f', 
                 groupId: "${GroupId}", 
                 nexusUrl: '172.20.10.134:8081', 
                 nexusVersion: 'nexus3', 
                 protocol: 'http', 
-                repository: "${DounmogniDevOpsLab-RELEASE}", 
+                repository: "${NexusRepo}", 
                 version: "${Version}"
-             //}
+             }
             }
         }
         
