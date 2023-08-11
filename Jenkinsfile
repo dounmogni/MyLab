@@ -39,9 +39,9 @@ pipeline{
         //stage 4 Publis the artefacts to Nexus
         stage ("Publish to Nexus") {
             steps {
-             script {
+             //script {
                     // condition /initialisation to publish weither in snapshot or in relaease
-                def NexusRepo = Version.endsWith("SNAPSHOT") ? "DounmogniDevOpsLab-SNAPSHOT" : "DounmogniDevOpsLab-RELEASE"
+               // def NexusRepo = Version.endsWith("SNAPSHOT") ? "DounmogniDevOpsLab-SNAPSHOT" : "DounmogniDevOpsLab-RELEASE"
 
                 nexusArtifactUploader artifacts: 
                 [[artifactId: "${ArtifactId}", 
@@ -53,9 +53,9 @@ pipeline{
                 nexusUrl: '172.20.10.134:8081', 
                 nexusVersion: 'nexus3', 
                 protocol: 'http', 
-                repository: "${NexusRepo}", 
+                repository: "${DounmogniDevOpsLab-RELEASE}", 
                 version: "${Version}"
-             }
+             //}
             }
         }
         
