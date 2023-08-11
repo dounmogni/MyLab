@@ -4,12 +4,12 @@ pipeline{
     tools {
         maven 'maven'
     }
-    environment{
+    /* environment{
        ArtifactId = readMavenPom().getArtifactId()
        Version = readMavenPom().getVersion()
        Name = readMavenPom().getName()
        GroupId = readMavenPom().getGroupId()
-    }
+    } */
 
     stages {
         // Specify various stage with in stages
