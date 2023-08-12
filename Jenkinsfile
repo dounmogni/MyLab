@@ -34,6 +34,23 @@ pipeline{
         stage ('Deploy'){
             steps {
                 echo ' deploying...'
+                sshPublisher(publishers: 
+                [sshPublisherDesc(
+                    configName: 'Ansible_Controler', 
+                    transfers: [
+                        sshTransfer(
+                          cleanRemote: false, 
+                           excludes: '', 
+                           execCommand: 'ansible-playbook  -i /opt/playbooks/hosts /opt/playbooks/dowloadanddeploy.yml', 
+                           execTimeout: 120000, 
+                           flatten: false, 
+                           makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', 
+                           remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: ''
+                        )
+                    ], 
+                    usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)
+                ]
+                )
             }
         } 
         //stage 4 Publis the artefacts to Nexus
