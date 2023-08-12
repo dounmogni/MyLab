@@ -53,7 +53,15 @@ pipeline{
                 )
             }
         } 
-
+        // Stage 4 : Print some information
+        stage ('Print Environment variables'){
+                    steps {
+                        echo "Artifact ID is '${ArtifactId}'"
+                        echo "Version is '${Version}'"
+                        echo "GroupID is '${GroupId}'"
+                        echo "Name is '${Name}'"
+                    }
+        } 
         //stage 4 Publis the artefacts to Nexus
         stage ("Publish to Nexus") {
             steps {
@@ -77,15 +85,7 @@ pipeline{
             }
         }
         
-         // Stage 4 : Print some information
-        stage ('Print Environment variables'){
-                    steps {
-                        echo "Artifact ID is '${ArtifactId}'"
-                        echo "Version is '${Version}'"
-                        echo "GroupID is '${GroupId}'"
-                        echo "Name is '${Name}'"
-                    }
-        } 
+         
     
     }
 
