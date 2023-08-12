@@ -54,7 +54,7 @@ pipeline{
             }
         } 
 */
-        //stage 4 Publis the artefacts to Nexus
+ /*       //stage 4 Publis the artefacts to Nexus
         stage ("Publish to Nexus") {
             steps {
              script {
@@ -76,7 +76,7 @@ pipeline{
              }
             }
         }
-        
+ */       
          // Stage 4 : Print some information
         stage ('Print Environment variables'){
                     steps {
