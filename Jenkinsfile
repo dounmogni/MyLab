@@ -28,10 +28,19 @@ pipeline{
 
             }
         }
+        
+        // Stage 3 : Print some information
+        stage ('Print Environment variables'){
+                    steps {
+                        echo "Artifact ID is '${ArtifactId}'"
+                        echo "Version is '${Version}'"
+                        echo "GroupID is '${GroupId}'"
+                        echo "Name is '${Name}'"
+                    }
+        } 
 
-
-        // Stage3 :
-        stage ('Deploy'){
+        // Stage4 Deploying the build artifact to Tomcat:
+        stage ('Deploy to tomcat'){
             steps {
                 echo ' deploying...'
                 sshPublisher(publishers: 
@@ -53,16 +62,34 @@ pipeline{
                 )
             }
         } 
-        // Stage 4 : Print some information
-        stage ('Print Environment variables'){
-                    steps {
-                        echo "Artifact ID is '${ArtifactId}'"
-                        echo "Version is '${Version}'"
-                        echo "GroupID is '${GroupId}'"
-                        echo "Name is '${Name}'"
-                    }
+        // Stage5 Deploying the build artifact to Docker:
+        stage ('Deploy to Docker'){
+            steps {
+                echo ' deploying...'
+                sshPublisher(publishers: 
+                [sshPublisherDesc(
+                    configName: 'Ansible_Controler', 
+                    transfers: [
+                        sshTransfer(
+                          cleanRemote: false, 
+                           excludes: '', 
+                           execCommand: 'ansible-playbook  -i /opt/playbooks/hosts /opt/playbooks/dowloadanddeploy_docker.yml', 
+                           execTimeout: 120000, 
+                           flatten: false, 
+                           makeEmptyDirs: false, noDefaultExcludes: false, patternSeparator: '[, ]+', 
+                           remoteDirectory: '', remoteDirectorySDF: false, removePrefix: '', sourceFiles: ''
+                        )
+                    ], 
+                    usePromotionTimestamp: false, useWorkspaceInPromotion: false, verbose: false)
+                ]
+                )
+            }
         } 
-        //stage 4 Publis the artefacts to Nexus
+
+
+        
+
+        //stage 6 Publis the artefacts to Nexus
         stage ("Publish to Nexus") {
             steps {
              script {
