@@ -1,0 +1,28 @@
+---
+- name: This play is to Dowload the latest war file from nexus
+  hosts: localhost
+  become: true
+  vars_files:
+  - /opt/playbooks/variables.yml
+
+  tasks:
+    - name: Dowload the war file
+      shell: 'curl -u admin:dnd -L "http://172.20.10.134:8081/service/rest/v1/search/assets/download?sort=version&repository=DounmogniDevOpsLab-RELEASE&maven.groupId=com.vinaysdevopslab&maven.artifactId=VinayDevOpsLab&maven.extension=war" -H "accept: application/json" --output /home/ansibleadmin/latest.war'
+      args:
+        chdir: "{{ changedir_location }}"
+
+- name: Deploy the latest war to apache tomcat
+  hosts: tomcat
+  become: true
+  vars_files:
+    - /opt/playbooks/variables.yml
+
+  tasks:
+    - copy:
+        src: "{{ item }}"
+        dest: "{{ destination_location }}"
+        owner: tomcat
+        group: tomcat
+        mode: u+rwx,g+rwx,o-rwx
+      with_fileglob:
+        - "{{ buildartifact_location }}"
